@@ -28,7 +28,8 @@ class RegisterController extends AbstractController
      EntityManagerInterface $em, UserRepository $repo,
      UserPasswordHasherInterface $hash, Utils $utils, Messagerie $messagerie):Response{
         //import du fichier dde connexion mail
-        include 'App/smtp.php';
+        require '../src/smtp.php';
+       
         //variable qui stocke un nouvel utilisateur
         $user = new User();
         //variable qui stocke le formulaire
@@ -64,6 +65,7 @@ class RegisterController extends AbstractController
                 $content = '<p>Pour activer votre compte veuillez cliquer ci-dessous
                 </p><a href="localhost:8000">Activer</a>';
                 $messagerie->sendEmail($login, $mdp, $objet, $content, $user->getEmail());
+                dd($messagerie);
                 return $this->render('register/index.html.twig', [
                     'formulaire' => $form->createView(),
                     'error' => 'Le compte à bien été ajouté',

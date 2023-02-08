@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 class Messagerie{
     public function sendEmail($login, $mdp, $objet, $content, $addresse){
         //Load Composer's autoloader
-        require 'vendor/autoload.php';
+        require '../vendor/autoload.php';
 
         //Create an instance; passing `true` enables exceptions
         $mail = new PHPMailer(true);
