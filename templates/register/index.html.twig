@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}inscription{% endblock %}
+
+{% block body %}
+    {{ form_start(formulaire) }}
+
+    {{ form_end(formulaire) }}
+
+    <p>{{error}}</p>
+{% endblock %}

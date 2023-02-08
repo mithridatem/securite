@@ -1,0 +1,15 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.formulaire{
+    width: 30vh;
+}
+label{
+    width:45vh;
+}
+form{
+    width: 50vh;
+    margin: auto;
+    margin-top: 15vw;
+}
