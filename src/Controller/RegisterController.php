@@ -64,11 +64,12 @@ class RegisterController extends AbstractController
                 $objet = 'activation du compte';
                 $content = '<p>Pour activer votre compte veuillez cliquer ci-dessous
                 </p><a href="localhost:8000">Activer</a>';
-                $messagerie->sendEmail($login, $mdp, $objet, $content, $user->getEmail());
-                dd($messagerie);
+                //on stocke la fonction dans une variable
+                $status = $messagerie->sendEmail($login, $mdp, $objet, $content, $user->getEmail());
                 return $this->render('register/index.html.twig', [
                     'formulaire' => $form->createView(),
                     'error' => 'Le compte à bien été ajouté',
+                    'status' => $status,
                 ]);
             }
             //si le compte existe déja
@@ -76,6 +77,7 @@ class RegisterController extends AbstractController
                 return $this->render('register/index.html.twig', [
                     'formulaire' => $form->createView(),
                     'error' => 'Les informations sont incorrectes',
+                    'status' => '',
                 ]);
             }
         }
@@ -83,6 +85,7 @@ class RegisterController extends AbstractController
         return $this->render('register/index.html.twig', [
             'formulaire' => $form->createView(),
             'error' => '',
+            'status' => '',
         ]);
     }
 }
