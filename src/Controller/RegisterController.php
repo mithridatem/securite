@@ -17,20 +17,20 @@ use Monolog\Handler\Curl\Util;
 
 class RegisterController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('register/index.html.twig', [
-            'controller_name' => 'RegisterController',
+        return $this->render('register/home.html.twig', [
+            'connected' => 'OK',
         ]);
     }
     #[Route('/user/add', name: 'app_user_add')]
     public function addUser(Request $request,
      EntityManagerInterface $em, UserRepository $repo,
      UserPasswordHasherInterface $hash, Utils $utils, Messagerie $messagerie):Response{
-        //import du fichier dde connexion mail
-        require '../src/smtp.php';
-       
+        //récupération des identifiant de messagerie
+        $login = $this->getParameter('login');
+        $mdp = $this->getParameter('mdp');
         //variable qui stocke un nouvel utilisateur
         $user = new User();
         //variable qui stocke le formulaire
