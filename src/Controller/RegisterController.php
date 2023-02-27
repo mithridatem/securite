@@ -13,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Utils;
 use App\Service\Messagerie;
+use Monolog\Handler\Curl\Util;
 
 class RegisterController extends AbstractController
 {
@@ -40,6 +41,7 @@ class RegisterController extends AbstractController
         if($form->isSubmitted()){
             //récupération et nettoyage du mail
             $user->setEmail($utils->cleanInput($_POST['user']['email']));
+            //récupérer l'utilisateur
             $recup = $repo->findBy(['email'=>$user->getEmail()]);
             //test des doublons
             if($recup == null){
@@ -60,10 +62,12 @@ class RegisterController extends AbstractController
                 $em->persist($user);
                 //sauvegarder en BDD
                 $em->flush();
+                //récupérer l'id
+                $id = $user->getId();
                 //variable pour le mail
                 $objet = 'activation du compte';
                 $content = '<p>Pour activer votre compte veuillez cliquer ci-dessous
-                </p><a href="localhost:8000">Activer</a>';
+                </p><a href="localhost:8000/activate/'.$id.'">Activer</a>';
                 //on stocke la fonction dans une variable
                 $status = $messagerie->sendEmail($login, $mdp, $objet, $content, $user->getEmail());
                 return $this->render('register/index.html.twig', [
@@ -87,5 +91,34 @@ class RegisterController extends AbstractController
             'error' => '',
             'status' => '',
         ]);
+    }
+    #[Route('/activate/{id}', name: 'app_register_activate')]
+    public function activateUser($id, UserRepository $repo, 
+    EntityManagerInterface $em, Utils $utils): Response
+    {
+        //nettoyage du paramètre de la route
+        $id = $utils->cleanInput($id);
+        //vérifier si le compte existe
+        $user = $repo->find($id);
+        //cas l'utilisateur existe
+        if($user){
+            //mettre à jour le status (objet users)
+            $user->setActivated(true);
+            //persister les données
+            $em->persist($user);
+            //sauvegarder le changement
+            $em->flush();
+            //afficher le message
+            return $this->render('register/activate.html.twig', [
+                'error' => 'le compte à été activé',
+            ]);
+        }
+        //si il existe on met à jour 
+        else{
+            //afficher le message
+            return $this->render('register/index.html.twig', [
+                'error' => 'Le compte n\'existe pas',
+            ]);
+        }
     }
 }

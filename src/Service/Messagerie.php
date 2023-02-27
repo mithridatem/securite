@@ -9,6 +9,7 @@ class Messagerie{
     public function sendEmail($login, $mdp, $objet, $content, $addresse){
         //Load Composer's autoloader
         require '../vendor/autoload.php';
+        
 
         //Create an instance; passing `true` enables exceptions
         $mail = new PHPMailer(true);
@@ -24,7 +25,6 @@ class Messagerie{
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;      //'starttls' pour microsoft      //Enable implicit TLS encryption
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-            //Recipients
             //expéditeur
             $mail->setFrom($login, 'Mailer');
             //destinataire
@@ -40,7 +40,7 @@ class Messagerie{
             return 'Le mail à été envoyé avec success';
             //echo '<p>Message has been sent<p>';
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }
