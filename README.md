@@ -24,7 +24,9 @@ MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
 DATABASE_URL="mysql://root:@127.0.0.1:3306/securite?serverVersion=mariadb-10.4.24&charset=utf8mb4"
 #### Paramétrer avec vos identifiants SMTP
 LOGIN=''
+
 MDP=''
+
 5 Installer le projet avec la commande suivante dans un terminal :
 ```bash
 composer install
