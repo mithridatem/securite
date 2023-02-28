@@ -21,7 +21,7 @@ APP_ENV=dev
 APP_SECRET=fc2cd4284c88950bec8e886fb69223ce
 MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
 DATABASE_URL="mysql://root:@127.0.0.1:3306/securite?serverVersion=mariadb-10.4.24&charset=utf8mb4"
-# paramétrer avec vos identifiants SMTP
+#### Paramétrer avec vos identifiants SMTP
 LOGIN=''
 MDP=''
 5 Installer le projet avec la commande suivante dans un terminal :
