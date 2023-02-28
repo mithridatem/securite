@@ -17,6 +17,7 @@ cd securite
 touch .env
 ```
 4 Ajouter les lignes suivantes dans le fichier .env :
+
 APP_ENV=dev
 APP_SECRET=fc2cd4284c88950bec8e886fb69223ce
 MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
