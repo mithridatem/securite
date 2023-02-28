@@ -22,11 +22,13 @@ use Doctrine\Persistence\ManagerRegistry;
 class AppAuthAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
-
+    private $repo;
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator,
+    UserRepository $repo)
     {
+        $this->repo = $repo;
     }
 
     public function authenticate(Request $request): Passport
@@ -49,10 +51,21 @@ class AppAuthAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
-        // For example:
-
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        //récupération de l'utilisateur
+        $email = $request->request->get('email', '');
+        $recup = $this->repo->findBy(['email'=> $email]);
+        //test si l'utilisateur est connecté
+        if($recup){
+            //test si le compte est activé
+            if(!$recup[0]->isActivated()){
+                $id = $recup[0]->getId();
+                return new RedirectResponse($this->urlGenerator->generate('app_send_activate', ['id'=> $id]));
+            }
+            else{
+                return new RedirectResponse($this->urlGenerator->generate('app_home'));
+            }
+        }
+        
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }

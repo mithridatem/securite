@@ -121,4 +121,27 @@ class RegisterController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/sendMail/activate/{id}', name:'app_send_activate')]
+    public function sendMailActivate(Utils $utils, 
+    Messagerie $messagerie, UserRepository $repo,$id):Response{
+        //nettoyage de l'id
+        $id = $utils->cleanInput($id);
+        //récupération des identifiant de messagerie
+        $login = $this->getParameter('login');
+        $mdp = $this->getParameter('mdp');
+        //variable qui récupére l'utilisateur
+        $user = $repo->find($id);
+        if($user){
+            $objet = 'activation du compte';
+            $content = '<p>Pour activer votre compte veuillez cliquer ci-dessous
+            </p><a href="localhost:8000/activate/'.$id.'">Activer</a>';
+            //on stocke la fonction dans une variable
+            $status = $messagerie->sendEmail($login, $mdp, $objet, $content, $user->getEmail());
+            return new Response($status, 200, []);
+        }
+        else{
+            return new Response('Le compte n\'existe pas', 200, []);
+        }
+    }
 }
