@@ -15,19 +15,19 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use App\Repository\UserRepository;
-use App\Entity\User;
-use Doctrine\Persistence\ManagerRegistry;
-
 
 class AppAuthAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
+    //attribut pour stocker le UserRepository
     private $repo;
     public const LOGIN_ROUTE = 'app_login';
 
+    //on passe en paramètre le UserRepository dans le constructeur
     public function __construct(private UrlGeneratorInterface $urlGenerator,
     UserRepository $repo)
     {
+        //instanciation du UserRepository
         $this->repo = $repo;
     }
 
@@ -56,12 +56,16 @@ class AppAuthAuthenticator extends AbstractLoginFormAuthenticator
         $recup = $this->repo->findBy(['email'=> $email]);
         //test si l'utilisateur est connecté
         if($recup){
-            //test si le compte est activé
+            //test si le compte n'est pas activé
             if(!$recup[0]->isActivated()){
+                //récupération de l'id de l'utilisateur
                 $id = $recup[0]->getId();
+                //redirection vers la fonction d'activation
                 return new RedirectResponse($this->urlGenerator->generate('app_send_activate', ['id'=> $id]));
             }
+            //test si le compte est activé
             else{
+                //redirection vers l'acceuil
                 return new RedirectResponse($this->urlGenerator->generate('app_home'));
             }
         }

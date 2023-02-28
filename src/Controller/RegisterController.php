@@ -92,6 +92,7 @@ class RegisterController extends AbstractController
             'status' => '',
         ]);
     }
+    //fonction pour activer son compte depuis le mail
     #[Route('/activate/{id}', name: 'app_register_activate')]
     public function activateUser($id, UserRepository $repo, 
     EntityManagerInterface $em, Utils $utils): Response
@@ -121,7 +122,7 @@ class RegisterController extends AbstractController
             ]);
         }
     }
-
+    //fonction qui envoi le mail d'activation
     #[Route('/sendMail/activate/{id}', name:'app_send_activate')]
     public function sendMailActivate(Utils $utils, 
     Messagerie $messagerie, UserRepository $repo,$id):Response{
