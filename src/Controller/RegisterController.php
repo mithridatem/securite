@@ -114,7 +114,7 @@ class RegisterController extends AbstractController
                 'error' => 'le compte à été activé',
             ]);
         }
-        //si il existe on met à jour 
+        //le compte n'existe pas 
         else{
             //afficher le message
             return $this->render('register/index.html.twig', [
